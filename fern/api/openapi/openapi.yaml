@@ -16,10 +16,9 @@ tags:
 paths:
   "/v0/batch/jobs":
     post:
-      tags:
-      - "[1] Start Job"
       summary: Start Job
       description: Start a new batch job.
+      operationId: startJob
       requestBody:
         content:
           multipart/form-data:
@@ -31,32 +30,32 @@ paths:
                 json:
                   allOf:
                   - "$ref": "#/components/schemas/BaseRequest"
-                  - default:
-                      callback_url: 
-                      models:
-                        burst: {}
-                        face:
-                          descriptions: 
-                          facs: 
-                          fps_pred: 3.0
-                          identify_faces: false
-                          min_face_size: 60
-                          prob_threshold: 0.99
-                          save_faces: false
-                        facemesh: {}
-                        language:
-                          granularity: word
-                          identify_speakers: false
-                          sentiment: 
-                          toxicity: 
-                        ner:
-                          identify_speakers: false
-                        prosody:
-                          granularity: utterance
-                          identify_speakers: false
-                          window: 
-                      notify: false
-                      urls: []
+                  # - default:
+                  #     callback_url: 
+                  #     models:
+                  #       burst: {}
+                  #       face:
+                  #         descriptions: 
+                  #         facs: 
+                  #         fps_pred: 3.0
+                  #         identify_faces: false
+                  #         min_face_size: 60
+                  #         prob_threshold: 0.99
+                  #         save_faces: false
+                  #       facemesh: {}
+                  #       language:
+                  #         granularity: word
+                  #         identify_speakers: false
+                  #         sentiment: 
+                  #         toxicity: 
+                  #       ner:
+                  #         identify_speakers: false
+                  #       prosody:
+                  #         granularity: utterance
+                  #         identify_speakers: false
+                  #         window: 
+                  #     notify: false
+                  #     urls: []
                 file:
                   type: array
                   description: |-
@@ -79,10 +78,9 @@ paths:
               schema:
                 "$ref": "#/components/schemas/JobId"
     get:
-      tags:
-      - "[3] List Jobs"
       summary: List Jobs
       description: Sort and filter jobs.
+      operationId: listJobs
       parameters:
       - name: limit
         schema:
@@ -113,7 +111,7 @@ paths:
         schema:
           allOf:
           - "$ref": "#/components/schemas/When"
-          - default: created_before
+          # - default: created_before
         in: query
         description: Include only jobs that were created before or after `timestamp_ms`.
         required: false
@@ -133,7 +131,7 @@ paths:
         schema:
           allOf:
           - "$ref": "#/components/schemas/SortBy"
-          - default: created
+          # - default: created
         in: query
         description: The job timestamp to sort by.
         required: false
@@ -143,7 +141,7 @@ paths:
         schema:
           allOf:
           - "$ref": "#/components/schemas/Direction"
-          - default: asc
+          # - default: asc
         in: query
         description: The sort direction.
         required: false
@@ -160,10 +158,9 @@ paths:
                   "$ref": "#/components/schemas/Job<Request>"
   "/v0/batch/jobs/{id}/predictions":
     get:
-      tags:
-      - "[2] Get Job Predictions"
       summary: Get Job Predictions
       description: Get the JSON predictions of a completed job.
+      operationId: getJobPredictions
       parameters:
       - name: id
         schema:
@@ -184,10 +181,9 @@ paths:
                   "$ref": "#/components/schemas/SourceResult"
   "/v0/batch/jobs/{id}/artifacts":
     get:
-      tags:
-      - "[2] Get Job Predictions"
       summary: Get Job Artifacts
       description: Get the artifacts ZIP of a completed job.
+      operationId: getJobArtifacts
       parameters:
       - name: id
         schema:
@@ -216,10 +212,9 @@ paths:
                 type: string
   "/v0/batch/jobs/{id}":
     get:
-      tags:
-      - "[2] Get Job Predictions"
       summary: Get Job Details
       description: Get the request details and state of a given job.
+      operationId: getJobDetails
       parameters:
       - name: id
         schema:
@@ -237,6 +232,12 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Job<Request>"
 components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X_API_KEY
+      description: API key based authentication
   schemas:
     BaseRequest:
       type: object
@@ -1200,7 +1201,7 @@ components:
       - "$ref": "#/components/schemas/Source_Url"
       - "$ref": "#/components/schemas/Source_File"
       discriminator:
-        propertyName: type
+        propertyName: sourceType
         mapping:
           url: "#/components/schemas/Source_Url"
           file: "#/components/schemas/Source_File"
@@ -1221,9 +1222,9 @@ components:
       allOf:
       - type: object
         required:
-        - type
+        - sourceType
         properties:
-          type:
+          sourceType:
             type: string
             example: file
       - "$ref": "#/components/schemas/File"
@@ -1231,9 +1232,9 @@ components:
       allOf:
       - type: object
         required:
-        - type
+        - sourceType
         properties:
-          type:
+          sourceType:
             type: string
             example: url
       - "$ref": "#/components/schemas/Url"
