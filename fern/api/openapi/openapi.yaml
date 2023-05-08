@@ -19,54 +19,10 @@ paths:
       tags:
       - "[1] Start Job"
       summary: Start Job
+      x-fern-sdk-method-name: submit_job
       description: Start a new batch job.
       requestBody:
         content:
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-              - file
-              properties:
-                json:
-                  allOf:
-                  - "$ref": "#/components/schemas/BaseRequest"
-                  - default:
-                      callback_url: 
-                      models:
-                        burst: {}
-                        face:
-                          descriptions: 
-                          facs: 
-                          fps_pred: 3.0
-                          identify_faces: false
-                          min_face_size: 60
-                          prob_threshold: 0.99
-                          save_faces: false
-                        facemesh: {}
-                        language:
-                          granularity: word
-                          identify_speakers: false
-                          sentiment: 
-                          toxicity: 
-                        ner:
-                          identify_speakers: false
-                        prosody:
-                          granularity: utterance
-                          identify_speakers: false
-                          window: 
-                      notify: false
-                      urls: []
-                file:
-                  type: array
-                  description: |-
-                    Local media files (see recommended input filetypes) to be processed.
-
-                    If you wish to supply more than 100 files, consider providing them as an archive (`.zip`, `.tar.gz`, `.tar.bz2`, `.tar.xz`).
-                  items:
-                    type: string
-                    format: binary
-                  maxItems: 100
           application/json; charset=utf-8:
             schema:
               "$ref": "#/components/schemas/BaseRequest"
@@ -83,6 +39,7 @@ paths:
       - "[3] List Jobs"
       summary: List Jobs
       description: Sort and filter jobs.
+      x-fern-sdk-method-name: list_jobs
       parameters:
       - name: limit
         schema:
@@ -163,6 +120,7 @@ paths:
       tags:
       - "[2] Get Job Predictions"
       summary: Get Job Predictions
+      x-fern-sdk-method-name: get_job_predictions
       description: Get the JSON predictions of a completed job.
       parameters:
       - name: id
@@ -187,6 +145,7 @@ paths:
       tags:
       - "[2] Get Job Predictions"
       summary: Get Job Artifacts
+      x-fern-sdk-method-name: get_job_artifacts
       description: Get the artifacts ZIP of a completed job.
       parameters:
       - name: id
@@ -219,6 +178,7 @@ paths:
       tags:
       - "[2] Get Job Predictions"
       summary: Get Job Details
+      x-fern-sdk-method-name: get_job_details
       description: Get the request details and state of a given job.
       parameters:
       - name: id
@@ -1219,23 +1179,9 @@ components:
           description: An error message.
     Source_File:
       allOf:
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            example: file
       - "$ref": "#/components/schemas/File"
     Source_Url:
       allOf:
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            example: url
       - "$ref": "#/components/schemas/Url"
     State:
       type: object
@@ -1409,3 +1355,10 @@ components:
           description: The step size of the sliding window.
           default: 1.0
           minimum: 0.5
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Hume-Api-Key
+security:
+- apiKeyAuth: []
