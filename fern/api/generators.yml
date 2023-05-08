@@ -2,12 +2,12 @@ groups:
   publish:
     generators:
       - name: fernapi/fern-typescript-sdk
-        version: 0.5.20
+        version: 0.5.20-3-g2505487f
         output:
           location: npm
           package-name: '@fern-api/hume'
           token: ${FERN_NPM_TOKEN}
         github:
           repository: fern-hume/hume-typescript-sdk
-        config: 
+        config:
           namespaceExport: Hume
