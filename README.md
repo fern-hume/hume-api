@@ -2,7 +2,7 @@
 
 Tagging a release on this repository will update the:
 
-- [Node.js SDK repo](https://github.com/fern-hume/hume-node)
+- [TypeScript SDK repo](https://github.com/fern-hume/hume-typescript-sdk)
 
 ## What is in this repository?
 
