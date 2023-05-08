@@ -8,4 +8,6 @@ groups:
           package-name: '@fern-api/hume'
           token: ${FERN_NPM_TOKEN}
         github:
-          repository: fern-hume/hume-client-node
+          repository: fern-hume/hume-typescript-sdk
+        config: 
+          namespaceExport: Hume
